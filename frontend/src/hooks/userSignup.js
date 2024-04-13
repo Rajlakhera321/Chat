@@ -12,7 +12,7 @@ export const userSignup = () => {
         
         setLoading(true);
         try {
-            const res = await fetch("https://ominous-guacamole-r54vqqq49x4cxpvg-3000.app.github.dev/api/v1/auth/signup", {
+            const res = await fetch("https://jubilant-umbrella-q57gjjj7r7qh94qq-3000.app.github.dev/api/v1/auth/signup", {
                 method: "POST",
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" },
@@ -23,8 +23,8 @@ export const userSignup = () => {
                 throw new Error(data.error);
             }
 
-            localStorage.setItem("chat-user", JSON.stringify(data))
-            setAuthUser(data);
+            localStorage.setItem("chat-user", JSON.stringify(data.user))
+            setAuthUser(data.user);
         } catch (error) {
             toast.error(error.message)
         } finally {

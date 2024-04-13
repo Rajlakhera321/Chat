@@ -25,17 +25,20 @@ export const signup = async (req, res) => {
             gender,
             profilePic: gender === 'male' ? boyProfile : girlProfile
         });
-        const token = generateToken(data._id, res);
+        const token = generateToken(data._id);
+
+        await res.cookie("jwt", token, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true, // prevent XSS attacks cross-site scripting attacks
+            sameSite: "strict", // CSRF attacks cross-site request forgery attacks
+            secure: true,
+        });
+        
         return res.status(201).json({
-            id: data._id,
-            username: data.username,
-            fullName: data.fullName,
-            profilePic: user.profilePic,
-            gender: user.gender,
-            token : token
+            token,
+            user
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }
@@ -49,23 +52,28 @@ export const login = async (req, res) => {
         if (!user || !isPasswordCorrect) {
             return res.status(400).json({ error: "Invalid username or password" });
         }
-        const token = generateToken(user._id, res);
-        res.status(200).json({
-            id: user._id,
-            username: user.username,
-            fullName: user.fullName,
-            profilePic: user.profilePic,
-            gender: user.gender,
-            token : token
+        const token = await generateToken(user._id);
+
+        res.cookie('jwt', token, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: true,
+        });
+
+
+        return res.status(200).json({
+            token,
+            user
         });
     } catch (error) {
+        console.log(error)
         return res.status(400).json({ error: "Password doesn't match" });
     }
 }
 
 export const logout = async (req, res) => {
     try {
-        // console.log(req,"adfdsfasdfdsf");
         res.cookie("jwt","",{maxAge: 0});
         return res.status(200).json({message: "Logged out success"});
     } catch (error) {

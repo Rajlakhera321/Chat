@@ -5,24 +5,22 @@ import toast from 'react-hot-toast';
 const useSendMessages = () => {
     const [loading, setLoading] = useState(false);
     const { messages, setMessages, selectedConversation } = useConversation();
-    const [getMessage,setGetMessage] = useState([]);
-
+    const token = localStorage.getItem("chatToken");
     const sendMessage = async (message) => {
         setLoading(true);
         try {
-            const res = await fetch(`https://ominous-guacamole-r54vqqq49x4cxpvg-3000.app.github.dev/api/v1/message/send/${selectedConversation._id}`, {
+            const res = await fetch(`https://jubilant-umbrella-q57gjjj7r7qh94qq-3000.app.github.dev/api/v1/message/send/${selectedConversation._id}`, {
                 method: "POST",
                 credentials: 'include',
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "Authorization": token},
                 body: JSON.stringify({ message }),
             })
 
             const data = await res.json();
             if (data.error) throw new Error(data.error);
-            // console.log([...messages.message,data])
-            setMessages([...messages.message,data]);
+            const updatedMessages = [...messages.message, data];
+            setMessages({ ...messages, message: updatedMessages });
         } catch (error) {
-            console.log(error)
             toast.error(error.message);
         } finally {
             setLoading(false);

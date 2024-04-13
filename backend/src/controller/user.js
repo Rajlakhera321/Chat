@@ -2,10 +2,9 @@ import userModel from "../model/user.js";
 
 export const getUserForSidebar = async (req, res) => {
     try {
-        const loggedInUserId = req.userData;
-        console.log(loggedInUserId)
-
-        const allUsers = await userModel.find({ _id: { $ne: loggedInUserId } }).select('-password');
+        const {_id} = req.userData;
+        
+        const allUsers = await userModel.find({ _id: { $ne: _id } }).select('-password');
         
         return res.status(200).json({ message: allUsers });
     } catch (error) {

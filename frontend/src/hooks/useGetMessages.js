@@ -5,15 +5,15 @@ import toast from 'react-hot-toast';
 const useGetMessages = () => {
     const [loading, setLoading] = useState(false);
     const { messages, setMessages, selectedConversation } = useConversation();
-
+    const token = localStorage.getItem("chatToken");
     useEffect(() => {
         const getMessages = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`https://ominous-guacamole-r54vqqq49x4cxpvg-3000.app.github.dev/api/v1/message/${selectedConversation._id}`, {
+                const res = await fetch(`https://jubilant-umbrella-q57gjjj7r7qh94qq-3000.app.github.dev/api/v1/message/${selectedConversation._id}`, {
                     method: "GET",
                     credentials: 'include',
-                    headers: { "Content-Type": "application/json" },
+                    headers: { "Content-Type": "application/json", "Authorization": token},
                 })
                 const data = await res.json();
                 if (data.error) throw new Error(data.error);

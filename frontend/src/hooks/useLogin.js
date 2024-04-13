@@ -13,21 +13,19 @@ export const useLogin = () => {
 
         setLoading(true);
         try {
-            const res = await fetch("https://ominous-guacamole-r54vqqq49x4cxpvg-3000.app.github.dev/api/v1/auth/login", {
+            const res = await fetch("https://jubilant-umbrella-q57gjjj7r7qh94qq-3000.app.github.dev/api/v1/auth/login", {
                 method: "POST",
                 credentials: 'include',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, password }),
             })
-
             const data = await res.json();
-
-            if (data.error) {
-                throw new Error(data.error);
-            }
             
-            localStorage.setItem("chat-user", JSON.stringify(data))
-            setAuthUser(data);
+            if (data.error) throw new Error(data.error);
+            
+            localStorage.setItem("chat-user", JSON.stringify(data.user))
+            localStorage.setItem("chatToken", JSON.stringify(data.token))
+            setAuthUser(data.user);
         } catch (error) {
             toast.error(error.message)
         } finally {

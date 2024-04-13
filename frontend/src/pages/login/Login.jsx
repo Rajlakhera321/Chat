@@ -8,7 +8,6 @@ export default function Login() {
     const { loading, login } = useLogin();
 
     const handleSubmit = async (e) => {
-        console.log(username, password, "dsfasfasdfsad");
         e.preventDefault();
         await login(username, password);
     }

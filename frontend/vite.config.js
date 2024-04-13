@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     port: 8000,
     proxy: {
-      '/posts': "https://ominous-guacamole-r54vqqq49x4cxpvg-3000.app.github.dev/api/v1/auth"
+      '/posts': "https://jubilant-umbrella-q57gjjj7r7qh94qq-3000.app.github.dev/api/v1/auth"
     }
   }
 })
